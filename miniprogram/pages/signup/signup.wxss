@@ -1,0 +1,126 @@
+.page {
+    padding: 16rpx 32rpx 0;
+}
+
+/* ---------- 活动摘要 ---------- */
+.event-strip {
+    display: flex;
+    align-items: center;
+    padding: 26rpx 28rpx;
+    background: #FFFFFF;
+    border-radius: 28rpx;
+    box-shadow: 0 6rpx 24rpx rgba(26, 24, 21, 0.05);
+}
+
+.strip-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 84rpx;
+    padding: 8rpx 12rpx 10rpx;
+    background: #E3F6E9;
+    border-radius: 16rpx;
+    flex-shrink: 0;
+}
+
+.sd-month {
+    font-size: 18rpx;
+    font-weight: 700;
+    color: #2BA84A;
+}
+
+.sd-day {
+    font-size: 32rpx;
+    font-weight: 800;
+    color: #B2331F;
+    line-height: 1.1;
+}
+
+.strip-info {
+    flex: 1;
+    margin-left: 22rpx;
+    min-width: 0;
+}
+
+.strip-title {
+    display: block;
+    font-size: 30rpx;
+    font-weight: 700;
+    color: #1A1815;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.strip-meta {
+    display: block;
+    margin-top: 6rpx;
+    font-size: 24rpx;
+    color: #9C948B;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---------- 页头 ---------- */
+.page-head {
+    padding: 36rpx 4rpx 24rpx;
+}
+
+.page-title {
+    display: block;
+    font-size: 40rpx;
+    font-weight: 800;
+    letter-spacing: -0.5rpx;
+    color: #1A1815;
+}
+
+.page-sub {
+    display: block;
+    margin-top: 8rpx;
+    font-size: 24rpx;
+    color: #9C948B;
+}
+
+/* ---------- 表单 ---------- */
+.sheet {
+    background: #FFFFFF;
+    border-radius: 28rpx;
+    padding: 32rpx 32rpx 8rpx;
+    box-shadow: 0 6rpx 24rpx rgba(26, 24, 21, 0.05);
+}
+
+.field-last {
+    margin-bottom: 26rpx;
+}
+
+.textarea-sm {
+    height: 156rpx;
+}
+
+.tip {
+    display: block;
+    margin-top: 24rpx;
+    text-align: center;
+    font-size: 22rpx;
+    color: #B9B1A7;
+}
+
+/* ---------- 底部提交 ---------- */
+.bottom-space {
+    height: 180rpx;
+}
+
+.submit-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+    background: rgba(250, 248, 245, 0.96);
+    border-top: 2rpx solid #EFE9E1;
+}
+
+.submit-btn {
+    width: 100%;
+}

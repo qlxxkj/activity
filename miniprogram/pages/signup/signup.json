@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "在线报名",
+  "usingComponents": {
+    "wb-icon": "/components/wb-icon/wb-icon"
+  }
+}

@@ -1,0 +1,55 @@
+<view class="page">
+  <view class="page-head">
+    <text class="page-title">我发布的活动</text>
+    <text class="page-sub" wx:if="{{state === 'ready'}}">共 {{events.length}} 场</text>
+  </view>
+
+  <view class="loading" wx:if="{{state === 'loading'}}">
+    <view class="spinner"></view>
+  </view>
+
+  <view class="empty" wx:elif="{{state === 'error'}}">
+    <view class="empty-mark">
+      <wb-icon name="error" size="56" color="#2BA84A" />
+    </view>
+    <text class="empty-title">加载失败</text>
+    <text class="empty-desc">{{error}}</text>
+    <view class="btn-ghost empty-btn" bindtap="retry">重新加载</view>
+  </view>
+
+  <view class="empty" wx:elif="{{state === 'empty'}}">
+    <view class="empty-mark">
+      <wb-icon name="calendar" size="56" color="#2BA84A" />
+    </view>
+    <text class="empty-title">还没有发布过活动</text>
+    <text class="empty-desc">发起一场活动，把同好聚起来</text>
+    <view class="btn-primary empty-btn" bindtap="goPublish">去发布活动</view>
+  </view>
+
+  <view class="list" wx:else>
+    <view class="item" wx:for="{{events}}" wx:key="id">
+      <view class="item-main" bindtap="viewEvent" data-event-id="{{item.id}}">
+        <view class="item-top">
+          <text class="item-title">{{item.title}}</text>
+          <text class="tag">已发布</text>
+        </view>
+        <view class="item-meta">
+          <wb-icon name="calendar" size="24" color="#A79E93" />
+          <text class="meta-text">{{item.timeText}}</text>
+        </view>
+        <view class="item-meta" wx:if="{{item.city || item.location}}">
+          <wb-icon name="location" size="24" color="#A79E93" />
+          <text class="meta-text">{{item.city}}{{item.location ? ' · ' + item.location : ''}}</text>
+        </view>
+        <view class="item-meta">
+          <wb-icon name="user" size="24" color="#A79E93" />
+          <text class="meta-text">{{item.capacityText}} · {{item.created_date}} 发布</text>
+        </view>
+      </view>
+
+      <view class="item-foot">
+        <view class="act" bindtap="viewEvent" data-event-id="{{item.id}}">查看活动</view>
+      </view>
+    </view>
+  </view>
+</view>

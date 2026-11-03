@@ -1,0 +1,250 @@
+/* ==========================================================
+   活动广场 · 设计系统
+   暖纸底色 / 柿红主色 / 层级靠字重与留白，而不是靠描边
+   ========================================================== */
+
+page {
+    min-height: 100%;
+    background: #F7F5F2;
+    color: #1A1815;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+view,
+text,
+button,
+input,
+textarea {
+    box-sizing: border-box;
+}
+
+button {
+    padding: 0;
+    margin: 0;
+    line-height: normal;
+    background: transparent;
+}
+
+button::after {
+    border: none;
+}
+
+/* ---------- 页面容器 ---------- */
+.page {
+    padding: 8rpx 32rpx 56rpx;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+    background: #FFFFFF;
+    border-radius: 28rpx;
+    box-shadow: 0 6rpx 24rpx rgba(26, 24, 21, 0.05);
+}
+
+/* ---------- 文字层级 ---------- */
+.h1 {
+    font-size: 48rpx;
+    font-weight: 800;
+    letter-spacing: -1rpx;
+    color: #1A1815;
+}
+
+.h2 {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: #1A1815;
+}
+
+.body {
+    font-size: 28rpx;
+    color: #6E6862;
+    line-height: 1.7;
+}
+
+.caption {
+    font-size: 24rpx;
+    color: #9C948B;
+}
+
+.eyebrow {
+    font-size: 22rpx;
+    font-weight: 600;
+    letter-spacing: 2rpx;
+    color: #9C948B;
+}
+
+/* ---------- 按钮 ---------- */
+.btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 96rpx;
+    background: #2BA84A;
+    color: #FFFFFF;
+    font-size: 32rpx;
+    font-weight: 700;
+    letter-spacing: 1rpx;
+    border-radius: 24rpx;
+    box-shadow: 0 8rpx 20rpx rgba(43, 168, 74, 0.24);
+}
+
+.btn-primary.is-loading {
+    opacity: 0.72;
+    box-shadow: none;
+}
+
+.btn-ghost {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 96rpx;
+    background: #FFFFFF;
+    color: #1A1815;
+    font-size: 30rpx;
+    font-weight: 600;
+    border-radius: 24rpx;
+    border: 2rpx solid #E6DFD7;
+}
+
+.btn-text {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26rpx;
+    color: #9C948B;
+}
+
+/* ---------- 胶囊标签 ---------- */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 8rpx 18rpx;
+    border-radius: 999rpx;
+    background: #F3EFE9;
+    font-size: 22rpx;
+    color: #6E6862;
+}
+
+.chip-brand {
+    background: #E3F6E9;
+    color: #2BA84A;
+    font-weight: 600;
+}
+
+/* ---------- 分割线 ---------- */
+.hairline {
+    height: 2rpx;
+    background: #F0EBE4;
+}
+
+/* ---------- 表单 ---------- */
+.field {
+    margin-bottom: 32rpx;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 14rpx;
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #6E6862;
+}
+
+.req {
+    color: #2BA84A;
+    margin-left: 6rpx;
+}
+
+.input {
+    width: 100%;
+    height: 96rpx;
+    padding: 0 28rpx;
+    background: #FAF8F5;
+    border: 2rpx solid #F0EBE4;
+    border-radius: 20rpx;
+    font-size: 30rpx;
+    color: #1A1815;
+}
+
+.textarea {
+    width: 100%;
+    height: 200rpx;
+    padding: 24rpx 28rpx;
+    background: #FAF8F5;
+    border: 2rpx solid #F0EBE4;
+    border-radius: 20rpx;
+    font-size: 30rpx;
+    line-height: 1.6;
+    color: #1A1815;
+}
+
+.input-placeholder {
+    color: #B9B1A7;
+}
+
+.error-text {
+    display: block;
+    margin: 4rpx 0 20rpx;
+    font-size: 24rpx;
+    color: #D64533;
+}
+
+/* ---------- 加载 / 空态 ---------- */
+.spinner {
+    width: 44rpx;
+    height: 44rpx;
+    border: 5rpx solid #E3F6E9;
+    border-top-color: #2BA84A;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 140rpx 48rpx 80rpx;
+    text-align: center;
+}
+
+.empty-mark {
+    width: 132rpx;
+    height: 132rpx;
+    border-radius: 44rpx;
+    background: #FFFFFF;
+    box-shadow: 0 8rpx 28rpx rgba(26, 24, 21, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32rpx;
+}
+
+.empty-title {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: #1A1815;
+}
+
+.empty-desc {
+    margin-top: 12rpx;
+    font-size: 26rpx;
+    color: #9C948B;
+    line-height: 1.6;
+}
+
+.empty-btn {
+    margin-top: 40rpx;
+    min-width: 320rpx;
+}
+
+/* ---------- 底部安全区 ---------- */
+.safe-bottom {
+    height: env(safe-area-inset-bottom);
+}

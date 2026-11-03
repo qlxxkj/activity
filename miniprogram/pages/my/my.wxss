@@ -1,0 +1,218 @@
+.page {
+    padding: 16rpx 32rpx 40rpx;
+}
+
+/* ---------- 页头 ---------- */
+.page-head {
+    padding: 16rpx 4rpx 32rpx;
+}
+
+.page-title {
+    display: block;
+    font-size: 48rpx;
+    font-weight: 800;
+    letter-spacing: -1rpx;
+    color: #1A1815;
+}
+
+/* ---------- 个人卡 ---------- */
+.profile {
+    display: flex;
+    align-items: center;
+    padding: 32rpx;
+    background: #FFFFFF;
+    border-radius: 28rpx;
+    box-shadow: 0 6rpx 24rpx rgba(26, 24, 21, 0.05);
+}
+
+.profile-guest {
+    box-shadow: 0 6rpx 24rpx rgba(26, 24, 21, 0.05);
+}
+
+.avatar-img {
+    width: 112rpx;
+    height: 112rpx;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #F3EFE9;
+}
+
+.avatar-fallback {
+    width: 112rpx;
+    height: 112rpx;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #E7F6EC 0%, #F3D3C6 100%);
+}
+
+.avatar-guest {
+    background: #F7F3EE;
+}
+
+.avatar-char {
+    font-size: 48rpx;
+    font-weight: 800;
+    color: #2BA84A;
+}
+
+.p-info {
+    flex: 1;
+    margin-left: 24rpx;
+    min-width: 0;
+}
+
+.p-name {
+    display: block;
+    font-size: 34rpx;
+    font-weight: 700;
+    color: #1A1815;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.p-sub {
+    display: block;
+    margin-top: 8rpx;
+    font-size: 24rpx;
+    color: #9C948B;
+    line-height: 1.5;
+}
+
+.p-logout {
+    flex-shrink: 0;
+    margin-left: 16rpx;
+    padding: 10rpx 24rpx;
+    border-radius: 999rpx;
+    background: #FAF8F5;
+    border: 2rpx solid #F0EBE4;
+    font-size: 22rpx;
+    color: #8C7F72;
+}
+
+/* ---------- 功能列表 ---------- */
+.menu {
+    margin-top: 24rpx;
+    background: #FFFFFF;
+    border-radius: 28rpx;
+    padding: 8rpx 28rpx;
+    box-shadow: 0 6rpx 24rpx rgba(26, 24, 21, 0.05);
+}
+
+.menu-row {
+    display: flex;
+    align-items: center;
+    padding: 28rpx 0;
+    border-top: 2rpx solid #F4EFE8;
+}
+
+.menu-row:first-child {
+    border-top: none;
+}
+
+.menu-ico {
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: 20rpx;
+    background: #E3F6E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.menu-text {
+    flex: 1;
+    margin-left: 22rpx;
+    font-size: 30rpx;
+    font-weight: 500;
+    color: #1A1815;
+}
+
+.menu-value {
+    margin-right: 10rpx;
+    font-size: 26rpx;
+    color: #A79E93;
+}
+
+/* ---------- 页脚 ---------- */
+.footer {
+    display: block;
+    margin-top: 56rpx;
+    text-align: center;
+    font-size: 22rpx;
+    letter-spacing: 1rpx;
+    color: #C0B6AA;
+}
+
+/* ---------- 授权面板 ---------- */
+.sheet-mask {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(26, 24, 21, 0.42);
+    z-index: 100;
+}
+
+.auth-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 101;
+    background: #FFFFFF;
+    border-radius: 36rpx 36rpx 0 0;
+    padding: 20rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
+    animation: sheet-up 0.26s ease-out;
+}
+
+@keyframes sheet-up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.sheet-handle {
+    width: 72rpx;
+    height: 8rpx;
+    border-radius: 4rpx;
+    background: #E8E1D9;
+    margin: 0 auto 36rpx;
+}
+
+.auth-title {
+    display: block;
+    font-size: 38rpx;
+    font-weight: 800;
+    letter-spacing: -0.5rpx;
+    color: #1A1815;
+}
+
+.auth-desc {
+    display: block;
+    margin-top: 14rpx;
+    font-size: 26rpx;
+    line-height: 1.7;
+    color: #8C7F72;
+}
+
+.auth-btn {
+    margin-top: 44rpx;
+    width: 100%;
+}
+
+.auth-cancel {
+    margin-top: 12rpx;
+    padding: 26rpx 0 8rpx;
+    text-align: center;
+    font-size: 26rpx;
+    color: #A79E93;
+}

@@ -1,0 +1,74 @@
+<view class="page">
+  <view class="page-head">
+    <text class="page-title">我的</text>
+  </view>
+
+  <!-- 已登录 -->
+  <view class="profile" wx:if="{{logged}}">
+    <image class="avatar-img" wx:if="{{avatar}}" src="{{avatar}}" mode="aspectFill" />
+    <view class="avatar-fallback" wx:else>
+      <text class="avatar-char">{{avatarChar}}</text>
+    </view>
+    <view class="p-info">
+      <text class="p-name">{{nickname || '微信用户'}}</text>
+      <text class="p-sub">已微信授权登录</text>
+    </view>
+    <view class="p-logout" catchtap="logout">退出</view>
+  </view>
+
+  <!-- 未登录：点击整卡从底部唤起授权 -->
+  <view class="profile profile-guest" wx:else bindtap="openAuthSheet">
+    <view class="avatar-fallback avatar-guest">
+      <wb-icon name="user" size="52" color="#C0B6AA" />
+    </view>
+    <view class="p-info">
+      <text class="p-name">还没有登录</text>
+      <text class="p-sub">浏览活动不受影响，报名和发布前授权即可</text>
+    </view>
+    <wb-icon name="arrow" size="32" color="#C9C1B7" />
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="menu">
+    <view class="menu-row" bindtap="goSignups">
+      <view class="menu-ico">
+        <wb-icon name="signup" size="34" color="#2BA84A" />
+      </view>
+      <text class="menu-text">我的报名</text>
+      <text class="menu-value" wx:if="{{logged}}">{{signedUpCount}}</text>
+      <wb-icon name="arrow" size="30" color="#CFC7BD" />
+    </view>
+
+    <view class="menu-row" bindtap="goPublished">
+      <view class="menu-ico">
+        <wb-icon name="calendar" size="34" color="#2BA84A" />
+      </view>
+      <text class="menu-text">我发布的活动</text>
+      <text class="menu-value" wx:if="{{logged}}">{{publishedCount}}</text>
+      <wb-icon name="arrow" size="30" color="#CFC7BD" />
+    </view>
+
+    <view class="menu-row" bindtap="goAbout">
+      <view class="menu-ico">
+        <wb-icon name="info" size="34" color="#2BA84A" />
+      </view>
+      <text class="menu-text">关于活动广场</text>
+      <text class="menu-value">v{{appVersion}}</text>
+      <wb-icon name="arrow" size="30" color="#CFC7BD" />
+    </view>
+  </view>
+
+  <text class="footer">活动广场 · 让好活动被看见</text>
+</view>
+
+<!-- 底部授权面板 -->
+<view class="sheet-mask" wx:if="{{showAuthSheet}}" bindtap="closeAuthSheet"></view>
+<view class="auth-sheet" wx:if="{{showAuthSheet}}" catchtap="noop">
+  <view class="sheet-handle"></view>
+  <text class="auth-title">微信授权登录</text>
+  <text class="auth-desc">登录后可报名活动、发起自己的活动，并随时查看报名与发布记录。我们只获取你的头像与昵称。</text>
+  <view class="btn-primary auth-btn {{authLoading ? 'is-loading' : ''}}" bindtap="confirmAuth">
+    {{authLoading ? '正在授权…' : '微信授权登录'}}
+  </view>
+  <view class="auth-cancel" bindtap="closeAuthSheet">暂不登录，先逛逛</view>
+</view>

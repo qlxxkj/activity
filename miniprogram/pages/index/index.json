@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "活动广场",
+  "navigationStyle": "default",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f5f7fa",
+  "usingComponents": {
+    "wb-icon": "/components/wb-icon/wb-icon"
+  }
+}

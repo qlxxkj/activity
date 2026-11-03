@@ -1,0 +1,214 @@
+/**
+ * 前端后端 API 客户端
+ * 把原 WorkBuddy 云 SDK 替换为自研后端（Node + Express + SQLite）。
+ * 所有请求走统一的 base 域名，带 Bearer token（若有会话）。
+ *
+ * 后端部署在哪，就把 BASE_URL 改成哪：
+ *   本地联调  → http://127.0.0.1:3000
+ *   你自己的服务器 → https://你的域名
+ */
+const BASE_URL = (process.env && process.env.API_BASE) || 'http://127.0.0.1:3000'
+
+// 会话存取（token + user），与旧 app.js 的 ensureSession 语义对齐
+const TOKEN_KEY = 'ep_token'
+const USER_KEY = 'ep_user'
+
+function getStored() {
+  try {
+    const token = wx.getStorageSync(TOKEN_KEY)
+    const user = wx.getStorageSync(USER_KEY)
+    return { token: token || '', user: user || null }
+  } catch (e) {
+    return { token: '', user: null }
+  }
+}
+
+function setStored(token, user) {
+  try {
+    if (token) wx.setStorageSync(TOKEN_KEY, token)
+    else wx.removeStorageSync(TOKEN_KEY)
+    if (user) wx.setStorageSync(USER_KEY, user)
+    else wx.removeStorageSync(USER_KEY)
+  } catch (e) {}
+}
+
+function request(method, path, { body, auth = true, raw = false } = {}) {
+  return new Promise((resolve, reject) => {
+    const { token } = getStored()
+    const header = { 'Content-Type': 'application/json' }
+    if (auth && token) header.Authorization = 'Bearer ' + token
+    wx.request({
+      url: BASE_URL.replace(/\/$/, '') + path,
+      method,
+      data: body,
+      header,
+      success: (res) => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(raw ? res.data : res.data)
+          return
+        }
+        const err = (res.data && res.data.error) || { message: 'HTTP ' + res.statusCode }
+        const e = new Error(err.message || '请求失败')
+        e.code = err.code
+        e.status = res.statusCode
+        reject(e)
+      },
+      fail: (e) => {
+        reject(new Error('网络错误：无法连接后端 ' + BASE_URL))
+      },
+    })
+  })
+}
+
+const cloud = {
+  auth: {
+    // 等价旧 getSession：返回 { data: { user } }，未登录 user 为 null
+    async getSession() {
+      const { token, user } = getStored()
+      if (!user) return { data: { user: null } }
+      // 校验 token 是否仍有效
+      try {
+        const res = await request('GET', '/api/auth/me', { auth: !!token })
+        return { data: { user: res.user } }
+      } catch (e) {
+        setStored('', null)
+        return { data: { user: null } }
+      }
+    },
+    // 等价旧 signInWithWechat：传 wx.login 的 code，换会话
+    async signInWithWechat(code) {
+      const res = await request('POST', '/api/auth/login', { body: { code }, auth: false })
+      setStored(res.token, res.user)
+      return { data: { user: res.user } }
+    },
+    async signOut() {
+      setStored('', null)
+      return { data: {} }
+    },
+  },
+  database: null, // 旧接口占位，data-access 已切到下方 api
+  // 供 data-access 调用的 API 封装（统一返回 { data, error }）
+  api: {
+    async listEvents(city) {
+      const q = city && city !== 'ALL' ? '?city=' + encodeURIComponent(city) : ''
+      try {
+        const res = await request('GET', '/api/events' + q)
+        return { data: res.data || [], error: null }
+      } catch (e) {
+        return { data: [], error: e }
+      }
+    },
+    async listCities() {
+      try {
+        const res = await request('GET', '/api/events/cities')
+        return { data: res.data || [], error: null }
+      } catch (e) {
+        return { data: [], error: e }
+      }
+    },
+    async listEventsByOwner() {
+      try {
+        const res = await request('GET', '/api/events/mine')
+        return { data: res.data || [], error: null }
+      } catch (e) {
+        return { data: [], error: e }
+      }
+    },
+    async getEvent(id) {
+      try {
+        const res = await request('GET', '/api/events/' + id)
+        return { data: res.data, error: null }
+      } catch (e) {
+        return { data: null, error: e }
+      }
+    },
+    async createEvent(payload) {
+      try {
+        const res = await request('POST', '/api/events', { body: payload })
+        return { data: res.data, error: null }
+      } catch (e) {
+        return { data: null, error: e }
+      }
+    },
+    async updateEvent(id, payload) {
+      try {
+        const res = await request('PUT', '/api/events/' + id, { body: payload })
+        return { data: res.data, error: null }
+      } catch (e) {
+        return { data: null, error: e }
+      }
+    },
+    async deleteEvent(id) {
+      try {
+        const res = await request('DELETE', '/api/events/' + id)
+        return { data: res.data, error: null }
+      } catch (e) {
+        return { data: null, error: e }
+      }
+    },
+    async listSignupsForEvent(eventId) {
+      try {
+        const res = await request('GET', '/api/events/' + eventId + '/signups')
+        return { data: res.data || [], error: null }
+      } catch (e) {
+        return { data: [], error: e }
+      }
+    },
+    async listSignupsByOwner() {
+      try {
+        const res = await request('GET', '/api/signups/mine')
+        return { data: res.data || [], error: null }
+      } catch (e) {
+        return { data: [], error: e }
+      }
+    },
+    async createSignup(payload) {
+      try {
+        const res = await request('POST', '/api/signups', { body: payload })
+        return { data: res.data, error: null }
+      } catch (e) {
+        return { data: null, error: e }
+      }
+    },
+    async deleteSignup(id) {
+      try {
+        const res = await request('DELETE', '/api/signups/' + id)
+        return { data: res.data, error: null }
+      } catch (e) {
+        return { data: null, error: e }
+      }
+    },
+    // 封面图上传（multipart）
+    async uploadCover(tempFilePath) {
+      return new Promise((resolve, reject) => {
+        const { token } = getStored()
+        if (!token) return reject(new Error('请先登录再上传图片'))
+        wx.uploadFile({
+          url: BASE_URL.replace(/\/$/, '') + '/api/upload/cover',
+          filePath: tempFilePath,
+          name: 'cover',
+          header: { Authorization: 'Bearer ' + token },
+          success: (res) => {
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+              const json = JSON.parse(res.data)
+              return resolve({ data: json.data, error: null })
+            }
+            const json = JSON.parse(res.data)
+            return reject(json.error || new Error('上传失败'))
+          },
+          fail: (e) => reject(e),
+        })
+      })
+    },
+    async health() {
+      try {
+        const res = await request('GET', '/api/health', { auth: false })
+        return { data: res, error: null }
+      } catch (e) {
+        return { data: null, error: e }
+      }
+    },
+  },
+}
+
+module.exports = { cloud, BASE_URL }

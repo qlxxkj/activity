@@ -1,0 +1,93 @@
+<view class="page">
+  <!-- 城市选择（系统导航栏下方） -->
+  <picker class="city-picker" mode="selector" range="{{cityTabs}}" value="{{activeCityIndex}}" bindchange="onCityPickerChange">
+    <view class="city-chip">
+      <wb-icon name="location" size="30" color="#2BA84A" />
+      <text class="city-chip-text">{{activeCity === 'ALL' ? '全部城市' : activeCity}}</text>
+      <view class="city-caret"></view>
+    </view>
+  </picker>
+
+  <!-- 城市横向筛选 -->
+  <scroll-view class="city-tabs" scroll-x enable-flex show-scrollbar="{{false}}">
+    <view
+      class="city-tab {{activeCity === item ? 'city-tab-active' : ''}}"
+      wx:for="{{cityTabs}}"
+      wx:key="*this"
+      data-city="{{item}}"
+      bindtap="selectCity"
+    >
+      <text class="city-tab-text">{{item === 'ALL' ? '全部' : item}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 加载 -->
+  <view class="loading" wx:if="{{state === 'loading'}}">
+    <view class="spinner"></view>
+  </view>
+
+  <!-- 错误 -->
+  <view class="empty" wx:elif="{{state === 'error'}}">
+    <view class="empty-mark">
+      <wb-icon name="error" size="56" color="#2BA84A" />
+    </view>
+    <text class="empty-title">没能加载出来</text>
+    <text class="empty-desc">{{error}}</text>
+    <view class="btn-ghost empty-btn" bindtap="retry">重新加载</view>
+  </view>
+
+  <!-- 空态 -->
+  <view class="empty" wx:elif="{{state === 'empty'}}">
+    <view class="empty-mark">
+      <wb-icon name="calendar" size="56" color="#2BA84A" />
+    </view>
+    <text class="empty-title">这里还没有活动</text>
+    <text class="empty-desc">成为第一个在{{activeCity === 'ALL' ? '这里' : activeCity}}发起活动的人</text>
+    <view class="btn-primary empty-btn" bindtap="goPublish">发布活动</view>
+  </view>
+
+  <!-- 活动列表 -->
+  <block wx:else>
+    <view class="list-head">
+      <text class="list-eyebrow">DISCOVER</text>
+      <text class="list-count">{{events.length}} 场活动</text>
+    </view>
+
+    <view class="event-list">
+      <view class="event-card" wx:for="{{events}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+        <view class="cover">
+          <image class="cover-img" wx:if="{{item.cover}}" src="{{item.cover}}" mode="aspectFill" />
+          <view class="cover-fallback" wx:else>
+            <text class="cover-initial">{{item.initial}}</text>
+          </view>
+          <view class="date-badge">
+            <text class="db-month">{{item.monthText}}</text>
+            <text class="db-day">{{item.dayText}}</text>
+          </view>
+          <view class="cover-city" wx:if="{{item.city}}">{{item.city}}</view>
+        </view>
+
+        <view class="card-main">
+          <text class="card-title">{{item.title}}</text>
+          <view class="card-meta">
+            <view class="meta-item">
+              <wb-icon name="time" size="26" color="#9C948B" />
+              <text class="meta-text">{{item.timeText}}</text>
+            </view>
+            <view class="meta-item" wx:if="{{item.location}}">
+              <wb-icon name="location" size="26" color="#9C948B" />
+              <text class="meta-text">{{item.location}}</text>
+            </view>
+          </view>
+          <view class="card-foot">
+            <view class="host">
+              <view class="host-avatar">{{item.hostInitial}}</view>
+              <text class="host-name">{{item.owner_name || '主办方'}}</text>
+            </view>
+            <text class="cap">{{item.capacityText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

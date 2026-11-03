@@ -1,0 +1,52 @@
+<view class="page">
+  <view class="page-head">
+    <text class="page-title">我的报名</text>
+    <text class="page-sub" wx:if="{{state === 'ready'}}">共 {{signups.length}} 场活动</text>
+  </view>
+
+  <view class="loading" wx:if="{{state === 'loading'}}">
+    <view class="spinner"></view>
+  </view>
+
+  <view class="empty" wx:elif="{{state === 'error'}}">
+    <view class="empty-mark">
+      <wb-icon name="error" size="56" color="#2BA84A" />
+    </view>
+    <text class="empty-title">加载失败</text>
+    <text class="empty-desc">{{error}}</text>
+    <view class="btn-ghost empty-btn" bindtap="retry">重新加载</view>
+  </view>
+
+  <view class="empty" wx:elif="{{state === 'empty'}}">
+    <view class="empty-mark">
+      <wb-icon name="signup" size="56" color="#2BA84A" />
+    </view>
+    <text class="empty-title">还没有报名记录</text>
+    <text class="empty-desc">去活动广场看看，遇到喜欢的就报个名</text>
+    <view class="btn-primary empty-btn" bindtap="goHome">去逛活动广场</view>
+  </view>
+
+  <view class="list" wx:else>
+    <view class="item" wx:for="{{signups}}" wx:key="id">
+      <view class="item-main" bindtap="viewEvent" data-event-id="{{item.event_id}}">
+        <view class="item-top">
+          <text class="item-title">{{item.event.title}}</text>
+          <text class="tag">已报名</text>
+        </view>
+        <view class="item-meta">
+          <wb-icon name="calendar" size="24" color="#A79E93" />
+          <text class="meta-text">{{item.created_date}} 报名</text>
+        </view>
+        <view class="item-meta">
+          <wb-icon name="user" size="24" color="#A79E93" />
+          <text class="meta-text">{{item.user_name}}{{item.user_phone ? ' · ' + item.user_phone : ''}}</text>
+        </view>
+      </view>
+
+      <view class="item-foot">
+        <view class="act" bindtap="viewEvent" data-event-id="{{item.event_id}}">查看活动</view>
+        <view class="act act-danger" catchtap="removeSignup" data-id="{{item.id}}">取消报名</view>
+      </view>
+    </view>
+  </view>
+</view>

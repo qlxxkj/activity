@@ -1,0 +1,111 @@
+<view class="loading" wx:if="{{state === 'loading'}}">
+  <view class="spinner"></view>
+</view>
+
+<view class="empty" wx:elif="{{state === 'error'}}">
+  <view class="empty-mark">
+    <wb-icon name="error" size="56" color="#2BA84A" />
+  </view>
+  <text class="empty-title">活动加载失败</text>
+  <text class="empty-desc">{{error}}</text>
+  <view class="btn-ghost empty-btn" bindtap="load">重新加载</view>
+</view>
+
+<block wx:else>
+  <!-- 封面 -->
+  <view class="hero">
+    <image class="hero-img" wx:if="{{event.cover}}" src="{{event.cover}}" mode="aspectFill" />
+    <view class="hero-fallback" wx:else>
+      <text class="hero-initial">{{event.initial}}</text>
+    </view>
+    <view class="hero-shade"></view>
+    <view class="hero-date">
+      <view class="hd-left">
+        <text class="hd-month">{{event.monthText}}</text>
+        <text class="hd-day">{{event.dayText}}</text>
+      </view>
+      <view class="hd-right">
+        <text class="hd-week">{{event.weekdayText}}</text>
+        <text class="hd-city">{{event.city || '城市待定'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="body">
+    <!-- 主信息 -->
+    <view class="sheet sheet-top">
+      <text class="detail-title">{{event.title}}</text>
+
+      <view class="rows">
+        <view class="row">
+          <view class="row-ico">
+            <wb-icon name="time" size="32" color="#2BA84A" />
+          </view>
+          <view class="row-text">
+            <text class="row-label">活动时间</text>
+            <text class="row-value">{{event.timeText}}</text>
+          </view>
+        </view>
+
+        <view class="row">
+          <view class="row-ico">
+            <wb-icon name="location" size="32" color="#2BA84A" />
+          </view>
+          <view class="row-text">
+            <text class="row-label">活动地点</text>
+            <text class="row-value">{{event.location || '待定'}}</text>
+          </view>
+        </view>
+
+        <view class="row">
+          <view class="row-ico">
+            <wb-icon name="user" size="32" color="#2BA84A" />
+          </view>
+          <view class="row-text">
+            <text class="row-label">报名名额</text>
+            <text class="row-value">{{event.capacityText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 介绍 -->
+    <view class="sheet">
+      <text class="block-title">活动介绍</text>
+      <text class="desc">{{event.description || '主办方还没有填写活动介绍。'}}</text>
+    </view>
+
+    <!-- 报名记录 -->
+    <view class="sheet">
+      <view class="block-head">
+        <text class="block-title">报名记录</text>
+        <text class="block-count">{{signups.length}} 人</text>
+      </view>
+
+      <view class="signup-empty" wx:if="{{signups.length === 0}}">
+        <text class="se-text">还没有人报名，来当第一个</text>
+      </view>
+
+      <view class="signup-row" wx:for="{{signups}}" wx:key="id">
+        <view class="s-avatar">{{item.initial}}</view>
+        <view class="s-info">
+          <text class="s-name">{{item.user_name}}</text>
+          <text class="s-phone">{{item.user_phone}}</text>
+        </view>
+        <text class="s-time">{{item.timeText}}</text>
+      </view>
+    </view>
+
+    <view class="bottom-space"></view>
+  </view>
+</block>
+
+<!-- 底部操作栏 -->
+<view class="bottom-bar" wx:if="{{state === 'ready'}}">
+  <view class="bb-left">
+    <text class="bb-num">{{signups.length}}</text>
+    <text class="bb-label">人已报名</text>
+  </view>
+  <view class="btn-primary bb-btn" wx:if="{{!isOwner}}" bindtap="goSignup">立即报名</view>
+  <view class="btn-ghost bb-btn bb-danger" wx:else bindtap="confirmDelete">删除该活动</view>
+</view>

@@ -1,0 +1,99 @@
+<view class="page">
+  <view class="page-head">
+    <text class="page-title">发起一场活动</text>
+    <text class="page-sub">填好基本信息，发布后立即出现在活动广场</text>
+  </view>
+
+  <!-- 封面 -->
+  <view class="sheet">
+    <view class="sheet-head">
+      <text class="sheet-title">活动封面</text>
+      <text class="sheet-hint">选填</text>
+    </view>
+
+    <view class="cover-edit" wx:if="{{coverPath}}">
+      <image class="cover-preview" src="{{coverPath}}" mode="aspectFill" />
+      <view class="cover-actions">
+        <view class="cover-btn" catchtap="chooseCover">重新选择</view>
+        <view class="cover-btn cover-btn-danger" catchtap="removeCover">移除</view>
+      </view>
+    </view>
+
+    <view class="cover-add" wx:else bindtap="chooseCover">
+      <wb-icon name="camera" size="52" color="#C0B6AA" />
+      <text class="cover-add-text">添加封面图</text>
+      <text class="cover-add-sub">建议横图，图片更吸引人</text>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="sheet">
+    <view class="sheet-head">
+      <text class="sheet-title">基本信息</text>
+    </view>
+
+    <view class="field">
+      <text class="field-label">活动名称<text class="req">*</text></text>
+      <input class="input" placeholder="例如：苏州河夜骑 · 城市灯光线" placeholder-class="input-placeholder" value="{{title}}" bindinput="onTitle" />
+    </view>
+
+    <view class="field field-last">
+      <text class="field-label">活动介绍</text>
+      <textarea class="textarea" placeholder="讲讲活动内容、流程和适合谁来参加" placeholder-class="input-placeholder" value="{{description}}" bindinput="onDesc" maxlength="500" />
+    </view>
+  </view>
+
+  <!-- 时间与地点 -->
+  <view class="sheet">
+    <view class="sheet-head">
+      <text class="sheet-title">时间与地点</text>
+    </view>
+
+    <view class="field">
+      <text class="field-label">所在城市<text class="req">*</text></text>
+      <input class="input" placeholder="例如：上海" placeholder-class="input-placeholder" value="{{city}}" bindinput="onCity" />
+    </view>
+
+    <view class="field">
+      <text class="field-label">具体地点</text>
+      <input class="input" placeholder="例如：静安区 · 苏州河畔集合点" placeholder-class="input-placeholder" value="{{location}}" bindinput="onLocation" />
+    </view>
+
+    <view class="date-row field-last">
+      <picker class="date-cell" mode="date" value="{{startTime}}" bindchange="onStartTime">
+        <view class="date-box">
+          <text class="date-label">开始日期</text>
+          <text class="date-value">{{startTime || '请选择'}}</text>
+        </view>
+      </picker>
+      <picker class="date-cell" mode="date" value="{{endTime}}" bindchange="onEndTime">
+        <view class="date-box">
+          <text class="date-label">结束日期</text>
+          <text class="date-value">{{endTime || '请选择'}}</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 报名设置 -->
+  <view class="sheet">
+    <view class="sheet-head">
+      <text class="sheet-title">报名设置</text>
+    </view>
+    <view class="field field-last">
+      <text class="field-label">人数上限</text>
+      <input class="input" type="number" placeholder="留空表示不限人数" placeholder-class="input-placeholder" value="{{capacity}}" bindinput="onCapacity" />
+    </view>
+  </view>
+
+  <text class="error-text" wx:if="{{fieldError}}">{{fieldError}}</text>
+  <text class="error-text" wx:if="{{submitError}}">{{submitError}}</text>
+
+  <view class="bottom-space"></view>
+</view>
+
+<view class="submit-bar">
+  <view class="btn-primary submit-btn {{submitting ? 'is-loading' : ''}}" bindtap="submit">
+    {{submitting ? '正在发布…' : '发布活动'}}
+  </view>
+</view>

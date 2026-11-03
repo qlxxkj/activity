@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/publish/publish",
+    "pages/my/my",
+    "pages/my-signups/my-signups",
+    "pages/my-published/my-published",
+    "pages/event-detail/event-detail",
+    "pages/signup/signup"
+  ],
+  "window": {
+    "navigationBarTitleText": "活动广场",
+    "navigationBarBackgroundColor": "#F7F5F2",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F7F5F2",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#9C948B",
+    "selectedColor": "#2BA84A",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "活动",
+        "iconPath": "images/tab-activity-normal.png",
+        "selectedIconPath": "images/tab-activity-active.png"
+      },
+      {
+        "pagePath": "pages/publish/publish",
+        "text": "发布",
+        "iconPath": "images/tab-publish-normal.png",
+        "selectedIconPath": "images/tab-publish-active.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "images/tab-profile-normal.png",
+        "selectedIconPath": "images/tab-profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
