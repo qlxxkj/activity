@@ -2,11 +2,27 @@
  * 鉴权中间件。
  * - requireUser: 必须带有效 Bearer token，且 users 表里有对应记录，注入 req.user
  * - optionalUser: 匿名可访问（浏览活动/报名记录），有 token 则注入 req.user
+ *
+ * 管理页旁路：当 token 的 sub 是 'admin-operator' 时，按该 openid 找/建 admin 用户。
  */
 const { verifyToken } = require('../services/wechat')
 
+const ADMIN_OPENID = 'admin-operator'
+
 function loadUser(db, payload) {
   if (!payload) return null
+  // 管理端 token（sub = 'admin-operator'）单独查
+  if (payload.sub === ADMIN_OPENID) {
+    let u = db.prepare('SELECT * FROM users WHERE openid = ?').get(ADMIN_OPENID)
+    if (!u) {
+      const info = db.prepare(
+        "INSERT INTO users (openid, nickname, created_at) VALUES (?, '管理端', datetime('now')) RETURNING *",
+        ADMIN_OPENID
+      ).get()
+      u = info
+    }
+    return u
+  }
   return db.prepare('SELECT * FROM users WHERE openid = ?').get(payload.sub) || null
 }
 
@@ -27,4 +43,4 @@ function optionalUser(req, res, next) {
   next()
 }
 
-module.exports = { requireUser, optionalUser }
+module.exports = { requireUser, optionalUser, ADMIN_OPENID }

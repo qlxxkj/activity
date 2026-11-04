@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>事项预约 · 服务端管理</title>
+<style>
+  :root{
+    --green:#2BA84A; --green-dark:#1f7a35; --ink:#1A1815; --sub:#8a847c;
+    --bg:#F7F5F2; --card:#fff; --line:#e7e3da; --danger:#D9534F;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:960px;margin:0 auto;padding:24rpx;}
+  header{display:flex;align-items:center;justify-content:space-between;
+    background:var(--card);border-radius:16px;padding:18px 22px;box-shadow:0 4px 14px rgba(26,24,21,.06);margin-bottom:18px;}
+  header h1{font-size:18px;margin:0;color:var(--ink)}
+  header .sub{font-size:12px;color:var(--sub);margin-top:4px}
+  .badge{font-size:12px;color:var(--green-dark);background:#e9f6ec;padding:6px 12px;border-radius:999px}
+  .logout{background:none;border:none;color:var(--sub);font-size:13px;cursor:pointer}
+  .card{background:var(--card);border-radius:16px;padding:20px 22px;box-shadow:0 4px 14px rgba(26,24,21,.05);margin-bottom:18px}
+  .card h2{font-size:15px;margin:0 0 14px;color:var(--ink);font-weight:600}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field.full{grid-column:1/-1}
+  label{font-size:12px;color:var(--sub)}
+  input,textarea,select{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fbfaf8;outline:none}
+  input:focus,textarea:focus{border-color:var(--green)}
+  textarea{min-height:70px;resize:vertical}
+  .btn{background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-size:14px;cursor:pointer;font-weight:600}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn.danger{background:var(--danger)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .row-actions{display:flex;gap:10px;margin-top:14px}
+  .toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:12px 22px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
+  .toast.show{opacity:.95}
+  .table-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{color:var(--sub);font-weight:600;font-size:12px}
+  .muted{color:var(--sub)}
+  .empty{color:var(--sub);text-align:center;padding:30px 0;font-size:13px}
+  .login-box{max-width:360px;margin:60px auto;background:var(--card);border-radius:16px;padding:28px;box-shadow:0 4px 14px rgba(26,24,21,.06)}
+  .login-box h2{margin:0 0 8px}
+  .login-box p{color:var(--sub);font-size:13px;margin:0 0 16px}
+  .err{color:var(--danger);font-size:13px;margin-top:8px;min-height:16px}
+  .hint{font-size:12px;color:var(--sub);line-height:1.6;margin-top:8px}
+  .hidden{display:none}
+  .tag{display:inline-block;font-size:11px;background:#eef;background:#eef1f7;color:#4a4640;padding:3px 8px;border-radius:6px}
+</style>
+</head>
+<body>
+
+<!-- 登录态 -->
+<div id="loginView">
+  <div class="login-box">
+    <h2>服务端管理登录</h2>
+    <p>请输入管理密钥（<code>backend/.env</code> 里的 <code>ADMIN_TOKEN</code>），用于在浏览器端发布/管理事项。</p>
+    <div class="field">
+      <label>管理密钥</label>
+      <input id="adminToken" type="password" placeholder="你的 ADMIN_TOKEN" />
+    </div>
+    <div class="err" id="loginErr"></div>
+    <button class="btn" style="width:100%;margin-top:14px" onclick="login()">登录</button>
+    <div class="hint">该密钥通过 Bearer 头走现有 /api/* 接口鉴权，不进微信登录流程。开发环境可在 backend/.env 里设 <code>ADMIN_TOKEN=dev</code> 快速使用。</div>
+  </div>
+</div>
+
+<!-- 管理态 -->
+<div id="adminView" class="hidden">
+  <header>
+    <div>
+      <h1>事项预约 · 服务端管理</h1>
+      <div class="sub" id="userSub">登录中…</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center">
+      <span class="badge" id="envBadge">-</span>
+      <button class="logout" onclick="logout()">退出</button>
+    </div>
+  </header>
+
+  <!-- 发布新事项 -->
+  <div class="card">
+    <h2>发布新事项</h2>
+    <div class="grid">
+      <div class="field full">
+        <label>事项名称 *</label>
+        <input id="f_title" placeholder="例如：苏州河夜骑 · 城市灯光线" maxlength="60"/>
+      </div>
+      <div class="field">
+        <label>城市 *</label>
+        <input id="f_city" placeholder="例如：上海"/>
+      </div>
+      <div class="field">
+        <label>具体地点</label>
+        <input id="f_location" placeholder="例如：静安区 · 苏州河畔"/>
+      </div>
+      <div class="field">
+        <label>开始日期</label>
+        <input id="f_start" type="date"/>
+      </div>
+      <div class="field">
+        <label>结束日期</label>
+        <input id="f_end" type="date"/>
+      </div>
+      <div class="field">
+        <label>名额上限（留空 = 不限）</label>
+        <input id="f_capacity" type="number" min="0" placeholder="0"/>
+      </div>
+      <div class="field">
+        <label>封面图 URL（选填）</label>
+        <input id="f_cover" placeholder="https://..."/>
+      </div>
+      <div class="field full">
+        <label>事项说明</label>
+        <textarea id="f_desc" placeholder="写写事项内容、流程、参与安排" maxlength="500"></textarea>
+      </div>
+    </div>
+    <div class="row-actions">
+      <button class="btn" id="createBtn" onclick="createEvent()">发布事项</button>
+      <button class="btn ghost" onclick="resetForm()">清空表单</button>
+      <span class="err" id="createErr" style="align-self:center"></span>
+    </div>
+  </div>
+
+  <!-- 事项列表 -->
+  <div class="card">
+    <h2>事项列表（公开）<span class="muted" id="listCount" style="font-weight:400;margin-left:8px"></span></h2>
+    <div class="table-wrap">
+      <table id="eventsTable">
+        <thead><tr><th>ID</th><th>名称</th><th>城市</th><th>开始</th><th>名额</th><th>操作</th></tr></thead>
+        <tbody id="eventsBody"></tbody>
+      </table>
+    </div>
+    <div class="empty hidden" id="eventsEmpty">还没有事项</div>
+    <div class="row-actions"><button class="btn ghost" onclick="loadEvents()">刷新列表</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let TOKEN = localStorage.getItem('ep_admin_token') || '';
+
+function base() { return location.origin }  // 同源调 /api/*
+
+function toast(msg, ok) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = ok === false ? '#D9534F' : '#1A1815';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+async function api(path, { method='GET', body } = {}) {
+  const res = await fetch(base() + path, {
+    method,
+    headers: {
+      'Content-Type':'application/json',
+      ...(TOKEN ? { Authorization: 'Bearer ' + TOKEN } : {})
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const json = await res.json().catch(()=>({}));
+  if (res.status === 401) { showLogin(); throw new Error('未授权'); }
+  if (!res.ok) throw new Error((json.error && json.error.message) || ('HTTP '+res.status));
+  return json;
+}
+
+function showLogin(){ document.getElementById('loginView').classList.remove('hidden'); document.getElementById('adminView').classList.add('hidden') }
+function showAdmin(){ document.getElementById('loginView').classList.add('hidden'); document.getElementById('adminView').classList.remove('hidden') }
+
+async function login() {
+  const t = document.getElementById('adminToken').value.trim();
+  if (!t) { document.getElementById('loginErr').textContent = '请输入管理密钥'; return; }
+  try {
+    // 调服务端管理登录路由：校验 ADMIN_TOKEN 后签长期 JWT
+    const r = await api('/api/auth/admin', { method:'POST', body: { token: t } });
+    TOKEN = r.token;
+    localStorage.setItem('ep_admin_token', TOKEN);
+    document.getElementById('loginErr').textContent = '';
+    showAdmin(); loadMe(); loadEvents();
+    toast('登录成功', true);
+  } catch(e) {
+    document.getElementById('loginErr').textContent = '登录失败：' + e.message;
+    TOKEN = '';
+  }
+}
+
+async function loadMe(){
+  try {
+    const r = await api('/api/auth/me');
+    const u = r.user || {};
+    document.getElementById('userSub').textContent = (u.name || '用户') + '（ID ' + (u.id||'-') + '）';
+    document.getElementById('envBadge').textContent = (location.protocol==='https:' ? '生产' : '开发');
+  } catch(e){}
+}
+
+function logout(){
+  TOKEN=''; localStorage.removeItem('ep_admin_token');
+  showLogin();
+}
+
+async function createEvent(){
+  const errEl = document.getElementById('createErr'); errEl.textContent='';
+  const payload = {
+    title: document.getElementById('f_title').value.trim(),
+    city: document.getElementById('f_city').value.trim(),
+    location: document.getElementById('f_location').value.trim() || null,
+    start_time: document.getElementById('f_start').value || null,
+    end_time: document.getElementById('f_end').value || null,
+    capacity: document.getElementById('f_capacity').value || 0,
+    description: document.getElementById('f_desc').value.trim() || null,
+    cover_image_url: document.getElementById('f_cover').value.trim() || null,
+    status: 'published',
+  };
+  if (!payload.title) { errEl.textContent='请填写事项名称'; return; }
+  if (!payload.city) { errEl.textContent='请填写城市'; return; }
+  const btn = document.getElementById('createBtn'); btn.disabled = true;
+  try {
+    await api('/api/events', { method:'POST', body: payload });
+    toast('事项已发布', true); resetForm(); loadEvents();
+  } catch(e){ errEl.textContent = e.message; }
+  finally { btn.disabled = false; }
+}
+
+function resetForm(){
+  ['f_title','f_city','f_location','f_start','f_end','f_capacity','f_cover','f_desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('createErr').textContent='';
+}
+
+async function loadEvents(){
+  try {
+    const r = await api('/api/events');
+    const rows = (r.data || []);
+    document.getElementById('listCount').textContent = rows.length + ' 条';
+    const body = document.getElementById('eventsBody');
+    const empty = document.getElementById('eventsEmpty');
+    const table = document.getElementById('eventsTable');
+    if (!rows.length){ empty.classList.remove('hidden'); table.style.display='none'; return; }
+    empty.classList.add('hidden'); table.style.display='';
+    body.innerHTML = rows.map(ev=>`
+      <tr>
+        <td>${ev.id}</td>
+        <td><b>${(ev.title||'').replace(/</g,'&lt;')}</b><div class="muted">${(ev.location||'').replace(/</g,'&lt;')}</div></td>
+        <td><span class="tag">${ev.city||'-'}</span></td>
+        <td>${ev.start_time||'-'}</td>
+        <td>${ev.capacity ? (ev.capacity+' 人') : '不限'}</td>
+        <td>
+          <button class="btn ghost" style="padding:6px 10px;font-size:12px" onclick="delEvent(${ev.id})">删除</button>
+        </td>
+      </tr>`).join('');
+  } catch(e){ toast('加载列表失败：'+e.message, false); }
+}
+
+async function delEvent(id){
+  if (!confirm('确定删除这条事项？（软删除，状态置为已归档）')) return;
+  try {
+    await api('/api/events/'+id, { method:'DELETE' });
+    toast('已删除', true); loadEvents();
+  } catch(e){ toast('删除失败：'+e.message, false); }
+}
+
+// 自动登录（刷新页面 / 带 URL 参数 ?t=）
+(function autoLogin(){
+  const urlT = new URLSearchParams(location.search).get('t');
+  if (urlT) { TOKEN = urlT; localStorage.setItem('ep_admin_token', urlT); document.getElementById('adminToken').value=''; }
+  if (TOKEN) {
+    api('/api/auth/me').then(()=>{ showAdmin(); loadMe(); loadEvents(); toast('已登录', true); })
+      .catch(()=>{ showLogin(); });
+  }
+})();
+</script>
+</body>
+</html>

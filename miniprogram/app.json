@@ -1,10 +1,8 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/publish/publish",
     "pages/my/my",
     "pages/my-signups/my-signups",
-    "pages/my-published/my-published",
     "pages/event-detail/event-detail",
     "pages/signup/signup"
   ],
@@ -28,12 +26,6 @@
         "selectedIconPath": "images/tab-activity-active.png"
       },
       {
-        "pagePath": "pages/publish/publish",
-        "text": "登记",
-        "iconPath": "images/tab-publish-normal.png",
-        "selectedIconPath": "images/tab-publish-active.png"
-      },
-      {
         "pagePath": "pages/my/my",
         "text": "我的",
         "iconPath": "images/tab-profile-normal.png",
@@ -43,5 +35,16 @@
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于定位并展示你所在的城市与街道，方便按地区查看事项"
+    },
+    "scope.userFuzzyLocation": {
+      "desc": "用于定位并展示你所在的城市与街道，方便按地区查看事项"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation"
+  ]
 }

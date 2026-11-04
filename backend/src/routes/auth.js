@@ -4,6 +4,7 @@
  * Express 4 要求 handler 是普通函数；用 next 接管异步错误。
  */
 const { code2Session, newToken } = require('../services/wechat')
+const { ADMIN_TOKEN } = require('../config')
 
 function loginRoute(db) {
   return (req, res, next) => {
@@ -55,8 +56,8 @@ function meRoute(db) {
 
 function profileRoute(db) {
   return (req, res) => {
-    const { nickname, avatar_url } = req.body || {}
     if (!req.user) return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: '未登录' } })
+    const { nickname, avatar_url } = req.body || {}
     const fields = []
     const params = []
     if (typeof nickname === 'string' && nickname.trim()) {
@@ -75,4 +76,29 @@ function profileRoute(db) {
   }
 }
 
-module.exports = { loginRoute, meRoute, profileRoute }
+/**
+ * 服务端管理页登录（旁路微信 code2session）：
+ * 校验 .env 的 ADMIN_TOKEN，通过后创建一个/复用 admin 用户并签发长期 token。
+ * 浏览器端 /admin 页调用：POST /api/auth/admin  body { token }
+ */
+function adminLoginRoute(db) {
+  return (req, res) => {
+    const provided = (req.body && req.body.token) || ''
+    if (!ADMIN_TOKEN || provided !== ADMIN_TOKEN) {
+      return res.status(401).json({ error: { code: 'BAD_ADMIN_TOKEN', message: '管理密钥错误' } })
+    }
+    // 复用或创建 admin 用户（openid 固定为 'admin-operator'）
+    let user = db.prepare("SELECT * FROM users WHERE openid = 'admin-operator'").get()
+    if (!user) {
+      db.prepare("INSERT INTO users (openid, nickname) VALUES ('admin-operator', '管理端')").run()
+      user = db.prepare("SELECT * FROM users WHERE openid = 'admin-operator'").get()
+    }
+    const token = newToken('admin-operator')
+    res.json({
+      token,
+      user: { id: user.id, name: user.nickname, openid: user.openid },
+    })
+  }
+}
+
+module.exports = { loginRoute, meRoute, profileRoute, adminLoginRoute }

@@ -22,7 +22,7 @@ const { open } = require('./db')
 const { PORT, UPLOAD_DIR, CORS_ORIGINS } = require('./config')
 const { register: registerEvents } = require('./routes/events')
 const { register: registerSignups } = require('./routes/signups')
-const { loginRoute, meRoute, profileRoute } = require('./routes/auth')
+const { loginRoute, meRoute, profileRoute, adminLoginRoute } = require('./routes/auth')
 const { coverUploadRoute } = require('./routes/storage')
 const { requireUser, optionalUser } = require('./middleware/auth')
 
@@ -43,6 +43,15 @@ app.use(express.json({ limit: '1mb' }))
 // 封面图：本地磁盘存储，只读静态服务
 app.use('/uploads', express.static(UPLOAD_DIR, { maxAge: '7d' }))
 
+// 服务端管理页（发布事项）：GET /admin → public/admin.html
+const ADMIN_DIR = path.join(__dirname, '..', 'public')
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(ADMIN_DIR, 'admin.html'))
+})
+app.get('/', (req, res) => {
+  res.json({ ok: true, name: 'event-plaza-backend', docs: '/admin' })
+})
+
 // 上传（multer 临时落地 → 路由内改名移入 uploads/）
 const upload = multer({ dest: path.join(UPLOAD_DIR, '.tmp') })
 fs.mkdirSync(path.join(UPLOAD_DIR, '.tmp'), { recursive: true })
@@ -52,6 +61,7 @@ app.post('/api/upload/cover', requireUser, upload.single('cover'), coverUploadRo
 app.post('/api/auth/login', loginRoute(db))
 app.get('/api/auth/me', optionalUser, meRoute(db))
 app.put('/api/auth/profile', requireUser, profileRoute(db))
+app.post('/api/auth/admin', adminLoginRoute(db)) // 服务端管理页登录（校验 ADMIN_TOKEN）
 
 // 活动 + 报名
 registerEvents(app, db)

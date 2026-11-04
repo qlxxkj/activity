@@ -1,4 +1,4 @@
-const { listSignupsByOwner, listEventsByOwner } = require('../../utils/data-access')
+const { listSignupsByOwner } = require('../../utils/data-access')
 const { initial } = require('../../utils/format')
 
 const APP_VERSION = '1.0.0'
@@ -10,7 +10,6 @@ Page({
     nickname: '',
     avatarChar: '我',
     signedUpCount: 0,
-    publishedCount: 0,
     loading: false,
     showAuthSheet: false,
     authLoading: false,
@@ -35,14 +34,8 @@ Page({
     })
 
     if (user.id) {
-      const [su, ev] = await Promise.all([
-        listSignupsByOwner(),
-        listEventsByOwner(user.id),
-      ])
-      this.setData({
-        signedUpCount: (su.data || []).length,
-        publishedCount: (ev.data || []).length,
-      })
+      const su = await listSignupsByOwner()
+      this.setData({ signedUpCount: (su.data || []).length })
     }
   },
 
@@ -52,14 +45,6 @@ Page({
       return
     }
     wx.navigateTo({ url: '/pages/my-signups/my-signups' })
-  },
-
-  goPublished() {
-    if (!this.data.logged) {
-      this.openAuthSheet()
-      return
-    }
-    wx.navigateTo({ url: '/pages/my-published/my-published' })
   },
 
   openAuthSheet() {
@@ -106,7 +91,6 @@ Page({
         nickname: '',
         avatarChar: '我',
         signedUpCount: 0,
-        publishedCount: 0,
       })
       wx.showToast({ title: '已退出登录', icon: 'none' })
     } catch (err) {}

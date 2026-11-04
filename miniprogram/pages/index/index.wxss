@@ -2,40 +2,119 @@
     padding: 24rpx 32rpx 56rpx;
 }
 
-/* ---------- 城市选择（系统导航栏下方，左对齐胶囊） ---------- */
-.city-picker {
-    display: inline-block;
-    margin-bottom: 8rpx;
+/* ---------- 定位头部：district + street ---------- */
+.loc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 14rpx rgba(26, 24, 21, 0.05);
 }
 
-.city-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8rpx;
-    height: 64rpx;
-    padding: 0 20rpx 0 14rpx;
-    background: #FFFFFF;
-    border-radius: 999rpx;
-    box-shadow: 0 4rpx 14rpx rgba(26, 24, 21, 0.06);
+.loc-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
+  min-width: 0;
 }
 
-.city-chip-text {
-    max-width: 132rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 24rpx;
-    font-weight: 600;
-    color: #1A1815;
+.loc-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
-.city-caret {
-    width: 0;
-    height: 0;
-    margin-left: 2rpx;
-    border-left: 6rpx solid transparent;
-    border-right: 6rpx solid transparent;
-    border-top: 7rpx solid #9C948B;
+.loc-main {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1A1815;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.loc-sub {
+  font-size: 20rpx;
+  color: #9C948B;
+  margin-top: 2rpx;
+}
+
+.loc-all {
+  padding: 10rpx 24rpx;
+  border: 1rpx solid #E5E1D8;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  color: #9C948B;
+  flex-shrink: 0;
+}
+
+.loc-all-active {
+  color: #FFFFFF;
+  background: #2BA84A;
+  border-color: #2BA84A;
+}
+
+/* ---------- 城市选择弹层（自实现） ---------- */
+.picker-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(26, 24, 21, 0.4);
+  z-index: 90;
+}
+
+.picker-sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: #FFFFFF;
+  border-radius: 28rpx 28rpx 0 0;
+  padding: 20rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  z-index: 100;
+}
+
+.picker-sheet-handle {
+  width: 64rpx;
+  height: 8rpx;
+  background: #E5E1D8;
+  border-radius: 4rpx;
+  margin: 0 auto 24rpx;
+}
+
+.picker-sheet-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1815;
+  text-align: center;
+  margin-bottom: 28rpx;
+}
+
+.picker-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.picker-grid-item {
+  width: calc(25% - 12rpx);
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  background: #F7F5F2;
+  border: 1rpx solid #EAE6DE;
+  border-radius: 14rpx;
+  font-size: 26rpx;
+  color: #4A4640;
+  box-sizing: border-box;
+}
+
+.picker-grid-item-active {
+  background: #2BA84A;
+  color: #FFFFFF;
+  border-color: #2BA84A;
 }
 
 /* ---------- 城市筛选 ---------- */

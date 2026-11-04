@@ -46,6 +46,9 @@ const CORS_ORIGINS = (process.env.CORS_ORIGINS || '*').split(',').map(s => s.tri
 // 封面文件 URL 前缀（浏览器可达地址），如 https://your-domain.com/uploads
 const UPLOAD_PUBLIC_BASE = process.env.UPLOAD_PUBLIC_BASE || ''
 
+// 服务端管理页登录密钥（浏览器端 /admin 页使用，不走微信 code2session 流程）
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || ''
+
 module.exports = {
   PORT,
   WX_APPID,
@@ -55,4 +58,5 @@ module.exports = {
   UPLOAD_DIR,
   UPLOAD_PUBLIC_BASE,
   CORS_ORIGINS,
+  ADMIN_TOKEN,
 }

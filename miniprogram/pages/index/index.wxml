@@ -1,12 +1,32 @@
 <view class="page">
-  <!-- 城市选择（系统导航栏下方） -->
-  <picker class="city-picker" mode="selector" range="{{cityTabs}}" value="{{activeCityIndex}}" bindchange="onCityPickerChange">
-    <view class="city-chip">
+  <!-- 定位头部：主文案城市名，副文案 区县 · 街道 -->
+  <view class="loc-head">
+    <view class="loc-left" bindtap="onOpenCityPicker">
       <wb-icon name="location" size="30" color="#2BA84A" />
-      <text class="city-chip-text">{{activeCity === 'ALL' ? '全部城市' : activeCity}}</text>
+      <view class="loc-text">
+        <text class="loc-main">{{locText || '正在定位…'}}</text>
+        <text class="loc-sub" wx:if="{{locDetail}}">{{locDetail}}</text>
+      </view>
       <view class="city-caret"></view>
     </view>
-  </picker>
+    <view class="loc-all {{activeCity === 'ALL' ? 'loc-all-active' : ''}}" bindtap="onSelectAll">全部</view>
+  </view>
+
+  <!-- 城市选择弹层（自实现，不依赖插件） -->
+  <view class="picker-mask" wx:if="{{showCityPicker}}" bindtap="closeCityPicker"></view>
+  <view class="picker-sheet" wx:if="{{showCityPicker}}" catchtap="noop">
+    <view class="picker-sheet-handle"></view>
+    <view class="picker-sheet-title">选择城市</view>
+    <view class="picker-grid">
+      <view
+        class="picker-grid-item {{activeCity === item ? 'picker-grid-item-active' : ''}}"
+        wx:for="{{cityTabs}}"
+        wx:key="*this"
+        data-city="{{item}}"
+        bindtap="pickCityFromSheet"
+      >{{item === 'ALL' ? '全部' : item}}</view>
+    </view>
+  </view>
 
   <!-- 城市横向筛选 -->
   <scroll-view class="city-tabs" scroll-x enable-flex show-scrollbar="{{false}}">
@@ -43,7 +63,7 @@
     </view>
     <text class="empty-title">这里还没有事项</text>
     <text class="empty-desc">记下{{activeCity === 'ALL' ? '你' : activeCity}}要预约或登记的事项</text>
-    <view class="btn-primary empty-btn" bindtap="goPublish">新增事项</view>
+    <view class="btn-ghost empty-btn" bindtap="goMySignups">查看我的事项</view>
   </view>
 
   <!-- 事项列表 -->
