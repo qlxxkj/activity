@@ -194,7 +194,7 @@
     color: #5F5A54;
 }
 
-/* ---------- 报名记录 ---------- */
+/* ---------- 参与记录 ---------- */
 .signup-empty {
     padding: 28rpx 0;
     text-align: center;

@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "活动详情",
+  "navigationBarTitleText": "事项详情",
   "usingComponents": {
     "wb-icon": "/components/wb-icon/wb-icon"
   }

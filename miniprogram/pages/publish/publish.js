@@ -63,9 +63,9 @@ Page({
     if (submitting) return
 
     const t = (title || '').trim()
-    if (!t) { this.setData({ fieldError: '请填写活动名称' }); return }
+    if (!t) { this.setData({ fieldError: '请填写事项名称' }); return }
     const c = (city || '').trim()
-    if (!c) { this.setData({ fieldError: '请填写活动所在城市' }); return }
+    if (!c) { this.setData({ fieldError: '请填写事项所在城市' }); return }
     const cap = capacity === '' ? 0 : Number(capacity)
     if (capacity !== '' && (isNaN(cap) || cap < 0)) {
       this.setData({ fieldError: '请填写正确的人数上限（留空表示不限）' })
@@ -73,7 +73,7 @@ Page({
     }
 
     // 登录校验
-    const session = await requireSession('发布活动前请先完成微信授权登录')
+    const session = await requireSession('登记事项前请先完成微信授权登录')
     if (!session || !session.user) return
 
     this.setData({ submitting: true, submitError: '', fieldError: '' })
@@ -103,11 +103,11 @@ Page({
 
     this.setData({ submitting: false })
     if (error) {
-      this.setData({ submitError: error.message || '发布失败，请重试' })
+      this.setData({ submitError: error.message || '保存失败，请重试' })
       return
     }
 
-    wx.showToast({ title: '活动发布成功', icon: 'success' })
+    wx.showToast({ title: '事项已保存', icon: 'success' })
     setTimeout(() => {
       wx.switchTab({ url: '/pages/index/index' })
     }, 800)

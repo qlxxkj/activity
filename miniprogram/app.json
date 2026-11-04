@@ -9,7 +9,7 @@
     "pages/signup/signup"
   ],
   "window": {
-    "navigationBarTitleText": "活动广场",
+    "navigationBarTitleText": "事项预约",
     "navigationBarBackgroundColor": "#F7F5F2",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#F7F5F2",
@@ -23,13 +23,13 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "活动",
+        "text": "事项",
         "iconPath": "images/tab-activity-normal.png",
         "selectedIconPath": "images/tab-activity-active.png"
       },
       {
         "pagePath": "pages/publish/publish",
-        "text": "发布",
+        "text": "登记",
         "iconPath": "images/tab-publish-normal.png",
         "selectedIconPath": "images/tab-publish-active.png"
       },

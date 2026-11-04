@@ -43,7 +43,7 @@ Page({
     }
     this.setData({ cityTabs: tabs })
 
-    // 2. 活动列表（按当前城市筛选）
+    // 2. 事项列表（按当前城市筛选）
     const { data, error } = await listEvents(this.data.activeCity)
     if (error) {
       this.setData({ state: 'error', error: error.message || '加载失败，请重试' })

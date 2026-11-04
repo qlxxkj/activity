@@ -92,7 +92,7 @@
     color: #9C948B;
 }
 
-/* ---------- 活动卡片 ---------- */
+/* ---------- 事项卡片 ---------- */
 .event-list {
     display: flex;
     flex-direction: column;

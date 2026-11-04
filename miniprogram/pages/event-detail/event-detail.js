@@ -47,7 +47,7 @@ Page({
   },
 
   async goSignup() {
-    const session = await requireSession('报名前请先完成微信授权登录')
+    const session = await requireSession('参与前请先完成微信授权登录')
     if (!session || !session.user) return
     wx.navigateTo({ url: '/pages/signup/signup?event_id=' + this.id })
   },
@@ -55,7 +55,7 @@ Page({
   async confirmDelete() {
     const { removed } = await deleteEvent(this.id)
     if (removed) {
-      wx.showToast({ title: '活动已删除', icon: 'success' })
+      wx.showToast({ title: '事项已删除', icon: 'success' })
       setTimeout(() => wx.navigateBack(), 600)
     } else {
       wx.showToast({ title: '删除失败', icon: 'none' })

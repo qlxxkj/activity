@@ -90,7 +90,7 @@ Page({
 
   goAbout() {
     wx.showModal({
-      title: '活动报名',
+      title: '事项预约',
       content: '版本 ' + APP_VERSION,
       confirmText: '知道了',
       showCancel: false,

@@ -2,7 +2,7 @@
     padding: 16rpx 32rpx 0;
 }
 
-/* ---------- 活动摘要 ---------- */
+/* ---------- 事项摘要 ---------- */
 .event-strip {
     display: flex;
     align-items: center;

@@ -19,5 +19,5 @@
   "compileType": "miniprogram",
   "appid": "wxfe3abdb95bbe4a5d",
   "projectname": "workbuddy-native-basic",
-  "miniprogramRoot": "miniprogram/",
+  "miniprogramRoot": "miniprogram/"
 }

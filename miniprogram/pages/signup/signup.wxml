@@ -1,5 +1,5 @@
 <view class="page">
-  <!-- 正在报名的活动 -->
+  <!-- 正在参与的事项 -->
   <view class="event-strip" wx:if="{{event}}">
     <view class="strip-date">
       <text class="sd-month">{{event.monthText}}</text>
@@ -12,8 +12,8 @@
   </view>
 
   <view class="page-head">
-    <text class="page-title">填写报名信息</text>
-    <text class="page-sub">主办方会通过手机号与你确认</text>
+    <text class="page-title">填写参与信息</text>
+    <text class="page-sub">登记人可通过手机号与你确认</text>
   </view>
 
   <view class="sheet">
@@ -36,13 +36,13 @@
   <text class="error-text" wx:if="{{fieldError}}">{{fieldError}}</text>
   <text class="error-text" wx:if="{{submitError}}">{{submitError}}</text>
 
-  <text class="tip">报名信息仅对本次活动主办方可见</text>
+  <text class="tip">参与信息仅登记人本人可见</text>
 
   <view class="bottom-space"></view>
 </view>
 
 <view class="submit-bar">
   <view class="btn-primary submit-btn {{submitting ? 'is-loading' : ''}}" bindtap="submit">
-    {{submitting ? '正在提交…' : '提交报名'}}
+    {{submitting ? '正在提交…' : '提交参与'}}
   </view>
 </view>

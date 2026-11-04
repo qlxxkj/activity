@@ -6,7 +6,7 @@
   <view class="empty-mark">
     <wb-icon name="error" size="56" color="#2BA84A" />
   </view>
-  <text class="empty-title">活动加载失败</text>
+  <text class="empty-title">事项加载失败</text>
   <text class="empty-desc">{{error}}</text>
   <view class="btn-ghost empty-btn" bindtap="load">重新加载</view>
 </view>
@@ -42,7 +42,7 @@
             <wb-icon name="time" size="32" color="#2BA84A" />
           </view>
           <view class="row-text">
-            <text class="row-label">活动时间</text>
+            <text class="row-label">事项时间</text>
             <text class="row-value">{{event.timeText}}</text>
           </view>
         </view>
@@ -52,7 +52,7 @@
             <wb-icon name="location" size="32" color="#2BA84A" />
           </view>
           <view class="row-text">
-            <text class="row-label">活动地点</text>
+            <text class="row-label">事项地点</text>
             <text class="row-value">{{event.location || '待定'}}</text>
           </view>
         </view>
@@ -62,7 +62,7 @@
             <wb-icon name="user" size="32" color="#2BA84A" />
           </view>
           <view class="row-text">
-            <text class="row-label">报名名额</text>
+            <text class="row-label">参与名额</text>
             <text class="row-value">{{event.capacityText}}</text>
           </view>
         </view>
@@ -71,19 +71,19 @@
 
     <!-- 介绍 -->
     <view class="sheet">
-      <text class="block-title">活动介绍</text>
-      <text class="desc">{{event.description || '主办方还没有填写活动介绍。'}}</text>
+      <text class="block-title">事项介绍</text>
+      <text class="desc">{{event.description || '还没有填写事项介绍。'}}</text>
     </view>
 
-    <!-- 报名记录 -->
+    <!-- 参与记录 -->
     <view class="sheet">
       <view class="block-head">
-        <text class="block-title">报名记录</text>
+        <text class="block-title">参与记录</text>
         <text class="block-count">{{signups.length}} 人</text>
       </view>
 
       <view class="signup-empty" wx:if="{{signups.length === 0}}">
-        <text class="se-text">还没有人报名，来当第一个</text>
+        <text class="se-text">还没有参与记录</text>
       </view>
 
       <view class="signup-row" wx:for="{{signups}}" wx:key="id">
@@ -104,8 +104,8 @@
 <view class="bottom-bar" wx:if="{{state === 'ready'}}">
   <view class="bb-left">
     <text class="bb-num">{{signups.length}}</text>
-    <text class="bb-label">人已报名</text>
+    <text class="bb-label">人已参与</text>
   </view>
-  <view class="btn-primary bb-btn" wx:if="{{!isOwner}}" bindtap="goSignup">立即报名</view>
-  <view class="btn-ghost bb-btn bb-danger" wx:else bindtap="confirmDelete">删除该活动</view>
+  <view class="btn-primary bb-btn" wx:if="{{!isOwner}}" bindtap="goSignup">我要参与</view>
+  <view class="btn-ghost bb-btn bb-danger" wx:else bindtap="confirmDelete">删除该事项</view>
 </view>

@@ -2,7 +2,7 @@ const { cloud } = require('./utils/cloud')
 
 App({
   globalData: {
-    appName: '活动报名',
+    appName: '事项预约',
   },
 
   async ensureSession() {

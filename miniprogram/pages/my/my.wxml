@@ -23,7 +23,7 @@
     </view>
     <view class="p-info">
       <text class="p-name">还没有登录</text>
-      <text class="p-sub">浏览活动不受影响，报名和发布前授权即可</text>
+      <text class="p-sub">浏览事项不受影响，参与和登记前授权即可</text>
     </view>
     <wb-icon name="arrow" size="32" color="#C9C1B7" />
   </view>
@@ -34,7 +34,7 @@
       <view class="menu-ico">
         <wb-icon name="signup" size="34" color="#2BA84A" />
       </view>
-      <text class="menu-text">我的报名</text>
+      <text class="menu-text">我的参与记录</text>
       <text class="menu-value" wx:if="{{logged}}">{{signedUpCount}}</text>
       <wb-icon name="arrow" size="30" color="#CFC7BD" />
     </view>
@@ -43,7 +43,7 @@
       <view class="menu-ico">
         <wb-icon name="calendar" size="34" color="#2BA84A" />
       </view>
-      <text class="menu-text">我发布的活动</text>
+      <text class="menu-text">我登记的事项</text>
       <text class="menu-value" wx:if="{{logged}}">{{publishedCount}}</text>
       <wb-icon name="arrow" size="30" color="#CFC7BD" />
     </view>
@@ -52,13 +52,13 @@
       <view class="menu-ico">
         <wb-icon name="info" size="34" color="#2BA84A" />
       </view>
-      <text class="menu-text">关于活动广场</text>
+      <text class="menu-text">关于事项预约</text>
       <text class="menu-value">v{{appVersion}}</text>
       <wb-icon name="arrow" size="30" color="#CFC7BD" />
     </view>
   </view>
 
-  <text class="footer">活动广场 · 让好活动被看见</text>
+  <text class="footer">事项预约 · 帮你记好每一件事</text>
 </view>
 
 <!-- 底部授权面板 -->
@@ -66,7 +66,7 @@
 <view class="auth-sheet" wx:if="{{showAuthSheet}}" catchtap="noop">
   <view class="sheet-handle"></view>
   <text class="auth-title">微信授权登录</text>
-  <text class="auth-desc">登录后可报名活动、发起自己的活动，并随时查看报名与发布记录。我们只获取你的头像与昵称。</text>
+  <text class="auth-desc">登录后可记录自己的参与、登记事项，并随时查看参与与登记记录。我们只获取你的头像与昵称。</text>
   <view class="btn-primary auth-btn {{authLoading ? 'is-loading' : ''}}" bindtap="confirmAuth">
     {{authLoading ? '正在授权…' : '微信授权登录'}}
   </view>

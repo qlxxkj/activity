@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "我的发布",
+  "navigationBarTitleText": "我登记的事项",
   "usingComponents": {
     "wb-icon": "/components/wb-icon/wb-icon"
   }

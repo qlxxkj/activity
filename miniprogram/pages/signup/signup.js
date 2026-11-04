@@ -57,7 +57,7 @@ Page({
       return
     }
 
-    const session = await requireSession('报名前请先完成微信授权登录')
+    const session = await requireSession('参与前请先完成微信授权登录')
     if (!session || !session.user) return
     this.prefillFromSession()
 
@@ -71,10 +71,10 @@ Page({
     this.setData({ submitting: false })
 
     if (error) {
-      this.setData({ submitError: error.message || '报名失败，请重试' })
+      this.setData({ submitError: error.message || '参与登记失败，请重试' })
       return
     }
-    wx.showToast({ title: '报名成功', icon: 'success' })
+    wx.showToast({ title: '参与已登记', icon: 'success' })
     setTimeout(() => wx.navigateBack(), 800)
   },
 })

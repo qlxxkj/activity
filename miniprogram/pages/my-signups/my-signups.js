@@ -51,9 +51,9 @@ Page({
     const id = e.currentTarget.dataset.id
     const res = await new Promise(resolve => {
       wx.showModal({
-        title: '取消报名',
-        content: '确定要取消这条报名吗？',
-        confirmText: '取消报名',
+        title: '取消参与',
+        content: '确定要取消这条参与记录吗？',
+        confirmText: '取消参与',
         cancelText: '再想想',
         success: r => resolve(r.confirm),
       })
@@ -64,7 +64,7 @@ Page({
       wx.showToast({ title: error.message || '操作失败', icon: 'none' })
       return
     }
-    wx.showToast({ title: '已取消报名', icon: 'success' })
+    wx.showToast({ title: '已取消参与', icon: 'success' })
     this.refresh()
   },
 })

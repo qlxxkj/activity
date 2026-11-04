@@ -1,5 +1,5 @@
 /**
- * 种子数据：建一个演示用户 + 5 场活动，便于首启即有内容。
+ * 种子数据：建一个演示用户 + 5 条演示事项，便于首启即有内容。
  * 运行：node src/seed.js
  */
 const { open } = require('./db')
@@ -12,7 +12,7 @@ function run() {
   let user = db.prepare('SELECT * FROM users WHERE openid = ?').get('demo-seed-owner')
   if (!user) {
     const info = db.prepare(
-      "INSERT INTO users (openid, nickname, created_at) VALUES ('demo-seed-owner', '演示主办方', datetime('now')) RETURNING *"
+      "INSERT INTO users (openid, nickname, created_at) VALUES ('demo-seed-owner', '演示登记人', datetime('now')) RETURNING *"
     ).get()
     user = info
   }
@@ -36,7 +36,7 @@ function run() {
     for (const e of events) {
       ins.run(user.id, user.nickname, e.title, e.description, e.city, e.location, e.start_time, e.capacity)
     }
-    console.log(`[seed] 插入 ${events.length} 场活动`)
+    console.log(`[seed] 插入 ${events.length} 条演示事项`)
   }
   console.log('[seed] 完成')
 }

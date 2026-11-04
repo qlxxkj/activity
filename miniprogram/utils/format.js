@@ -51,7 +51,7 @@ function capacityText(capacity) {
 // 列表卡片统一视图模型
 function decorateEvent(ev) {
   const d = dateParts(ev.start_time)
-  const owner = ev.owner_name || '主办方'
+  const owner = ev.owner_name || '我'
   return Object.assign({}, ev, {
     cover: ev.cover_image_url || '',
     initial: initial(ev.title),

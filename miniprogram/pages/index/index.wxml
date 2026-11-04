@@ -41,16 +41,16 @@
     <view class="empty-mark">
       <wb-icon name="calendar" size="56" color="#2BA84A" />
     </view>
-    <text class="empty-title">这里还没有活动</text>
-    <text class="empty-desc">成为第一个在{{activeCity === 'ALL' ? '这里' : activeCity}}发起活动的人</text>
-    <view class="btn-primary empty-btn" bindtap="goPublish">发布活动</view>
+    <text class="empty-title">这里还没有事项</text>
+    <text class="empty-desc">记下{{activeCity === 'ALL' ? '你' : activeCity}}要预约或登记的事项</text>
+    <view class="btn-primary empty-btn" bindtap="goPublish">新增事项</view>
   </view>
 
-  <!-- 活动列表 -->
+  <!-- 事项列表 -->
   <block wx:else>
     <view class="list-head">
-      <text class="list-eyebrow">DISCOVER</text>
-      <text class="list-count">{{events.length}} 场活动</text>
+      <text class="list-eyebrow">RECORDS</text>
+      <text class="list-count">{{events.length}} 条记录</text>
     </view>
 
     <view class="event-list">
@@ -82,7 +82,7 @@
           <view class="card-foot">
             <view class="host">
               <view class="host-avatar">{{item.hostInitial}}</view>
-              <text class="host-name">{{item.owner_name || '主办方'}}</text>
+              <text class="host-name">{{item.owner_name || '我'}}</text>
             </view>
             <text class="cap">{{item.capacityText}}</text>
           </view>
