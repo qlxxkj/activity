@@ -8,7 +8,7 @@
  *   你自己的服务器 → https://你的域名
  */
 // 后端地址：本地联调用 http://127.0.0.1:3000；部署到自己服务器后改成 https://你的域名
-const BASE_URL = 'http://127.0.0.1:3000'
+const BASE_URL = 'https://activity.70kj.vip'
 
 // 会话存取（token + user），与旧 app.js 的 ensureSession 语义对齐
 const TOKEN_KEY = 'ep_token'
