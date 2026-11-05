@@ -1,0 +1,33 @@
+# 代码推送 main → 自动用 miniprogram-ci 上传开发版到微信后台。
+# 不自动提审/发布，留人工在微信后台选体验版/提审，可控不锁版本。
+#
+# 前置：
+#   1. GitHub 仓库 Settings → Secrets → Actions 里建 secret：
+#        WX_CI_UPLOAD_KEY   值 = 微信后台「开发管理 → 开发设置 → 小程序代码上传密钥」下载的完整 PEM
+#   2. 该 key 对应的 AppID 必须与 project.config.json 里的一致 (wxfe3abdb95bbe4a5d)
+name: Upload miniprogram (dev build)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install miniprogram-ci
+        run: npm install miniprogram-ci --no-save
+
+      - name: Upload dev build
+        run: node upload-ci.mjs
+        env:
+          WX_CI_UPLOAD_KEY: ${{ secrets.WX_CI_UPLOAD_KEY }}
