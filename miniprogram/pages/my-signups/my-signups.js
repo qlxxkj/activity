@@ -1,4 +1,4 @@
-const { listSignupsByOwner, deleteSignup } = require('../../utils/data-access')
+const { listSignupsByOwner, deleteSignup, friendlyError } = require('../../utils/data-access')
 const { dateParts } = require('../../utils/format')
 
 Page({
@@ -23,7 +23,7 @@ Page({
     }
     const { data, error } = await listSignupsByOwner()
     if (error) {
-      this.setData({ state: 'error', error: error.message || '加载失败' })
+      this.setData({ state: 'error', error: friendlyError(error) })
       return
     }
     const rows = (data || []).map(row => Object.assign({}, row, {
@@ -61,7 +61,7 @@ Page({
     if (!res) return
     const { error } = await deleteSignup(id)
     if (error) {
-      wx.showToast({ title: error.message || '操作失败', icon: 'none' })
+      wx.showToast({ title: friendlyError(error), icon: 'none' })
       return
     }
     wx.showToast({ title: '已取消参与', icon: 'success' })

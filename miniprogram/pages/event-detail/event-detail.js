@@ -1,4 +1,4 @@
-const { getEvent, listSignupsForEvent, getSignupCount, deleteEvent } = require('../../utils/data-access')
+const { getEvent, listSignupsForEvent, getSignupCount, deleteEvent, friendlyError } = require('../../utils/data-access')
 const { requireSession } = require('../../utils/auth-guard')
 const { decorateEvent, dateParts, initial } = require('../../utils/format')
 
@@ -37,7 +37,7 @@ Page({
     this.setData({ state: 'loading', error: '' })
     const { data, error } = await getEvent(this.id)
     if (error) {
-      this.setData({ state: 'error', error: error.message || '加载失败' })
+      this.setData({ state: 'error', error: friendlyError(error) })
       return
     }
     // 公开人数（所有人可见，不依赖登录）

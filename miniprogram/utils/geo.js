@@ -42,11 +42,12 @@ function reverseGeocode(lat, lng) {
       success: (r) => {
         const body = r.data
         if (!body || !body.ok) {
-          return reject(new Error((body && body.message) || '逆地理接口异常：HTTP ' + r.statusCode))
+          // 友好提示，不暴露后端地址或技术细节
+          return reject(new Error('定位服务暂时不可用，请稍后再试'))
         }
         resolve(body.data)
       },
-      fail: (e) => reject(new Error('逆地理网络错误：' + (e.errMsg || ''))),
+      fail: () => reject(new Error('定位服务暂时不可用，请稍后再试')),
     })
   })
 }
@@ -70,7 +71,7 @@ async function getCityByLocation() {
       type: 'wgs84',
       altitude: false,
       success: resolve,
-      fail: (e) => reject(new Error('定位被拒或失败：' + (e.errMsg || ''))),
+      fail: () => reject(new Error('定位被拒或失败，请授予定位权限后重试')),
     })
   })
 

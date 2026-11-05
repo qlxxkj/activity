@@ -33,6 +33,30 @@ function setStored(token, user) {
   } catch (e) {}
 }
 
+// 用户可见错误消息映射：把内部技术细节替换为友好提示，不暴露服务器地址
+function friendlyError(e) {
+  if (!e) return '加载失败，请稍后重试'
+  const msg = e.message || ''
+  if (msg.indexOf('无法连接') !== -1 || msg.indexOf('网络错误') !== -1 || msg.indexOf('request:fail') !== -1) {
+    return '网络不稳定，请检查网络连接后重试'
+  }
+  if (e.status === 401 || e.code === 'UNAUTHORIZED' || msg.indexOf('登录') !== -1) {
+    return '请先登录后再试'
+  }
+  if (e.status === 403 || e.code === 'FORBIDDEN') {
+    return '暂无权限查看该内容'
+  }
+  if (e.status === 404 || e.code === 'NOT_FOUND') {
+    return '内容不存在或已删除'
+  }
+  if (e.status >= 500 || e.code === 'INTERNAL') {
+    return '服务器开小差了，请稍后再试'
+  }
+  // 后端自定义 message 可展示（通常是业务语义，非技术细节）
+  if (msg && msg !== '请求失败') return msg
+  return '加载失败，请稍后重试'
+}
+
 function request(method, path, { body, auth = true, raw = false } = {}) {
   return new Promise((resolve, reject) => {
     const { token } = getStored()
@@ -55,7 +79,7 @@ function request(method, path, { body, auth = true, raw = false } = {}) {
         reject(e)
       },
       fail: (e) => {
-        reject(new Error('网络错误：无法连接后端 ' + BASE_URL))
+        reject(new Error('无法连接服务器'))
       },
     })
   })
@@ -220,4 +244,4 @@ const cloud = {
   },
 }
 
-module.exports = { cloud, BASE_URL }
+module.exports = { cloud, BASE_URL, friendlyError }

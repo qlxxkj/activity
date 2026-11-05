@@ -1,4 +1,4 @@
-const { listEvents, listCities } = require('../../utils/data-access')
+const { listEvents, listCities, friendlyError } = require('../../utils/data-access')
 const { decorateEvent } = require('../../utils/format')
 const { getCityByLocation } = require('../../utils/geo')
 
@@ -99,7 +99,7 @@ Page({
     // 2. 事项列表（按当前城市筛选）
     const { data, error } = await listEvents(this.data.activeCity)
     if (error) {
-      this.setData({ state: 'error', error: error.message || '加载失败，请重试' })
+      this.setData({ state: 'error', error: friendlyError(error) })
       return
     }
     const rows = data || []
@@ -118,7 +118,7 @@ Page({
     this.setData({ state: 'loading', error: '' })
     const { data, error } = await listEvents(this.data.activeCity)
     if (error) {
-      this.setData({ state: 'error', error: error.message || '加载失败，请重试' })
+      this.setData({ state: 'error', error: friendlyError(error) })
       return
     }
     const rows = (data || []).map(decorateEvent)

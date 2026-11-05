@@ -3,7 +3,7 @@
  * 对外签名与旧版保持一致，页面无需改动。
  * 上传封面走 cloud.api.uploadCover（multipart 到后端本地存储）。
  */
-const { cloud } = require('./cloud')
+const { cloud, friendlyError } = require('./cloud')
 
 async function listEvents(city) {
   const { data, error } = await cloud.api.listEvents(city)
@@ -77,5 +77,5 @@ async function uploadEventCover(tempFilePath) {
 module.exports = {
   listEvents, listCities, listEventsByOwner, getEvent, createEvent, updateEvent, deleteEvent,
   listSignupsByOwner, listSignupsForEvent, getSignupCount, createSignup, deleteSignup,
-  uploadEventCover,
+  uploadEventCover, friendlyError,
 }
