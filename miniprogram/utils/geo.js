@@ -25,7 +25,7 @@
 
 // ============ 配置区（申请到 key 后填入） ============
 // 在 https://lbs.qq.com 申请 WebService API key，并绑定小程序 AppID
-const TENCENT_MAP_KEY = 'YOUR_TENCENT_MAP_KEY'
+const TENCENT_MAP_KEY = 'WMABZ-7V2KZ-4KWXM-T2NSN-JMFG2-6PF4Y'
 // 调用方名称（你的小程序名 / 开发者昵称，用于腾讯后台审计）
 const TENCENT_REFERER = 'activity'
 // 缓存 24h，避免每次冷启动都拉一次定位
