@@ -155,6 +155,14 @@ const cloud = {
         return { data: [], error: e }
       }
     },
+    async getSignupCount(eventId) {
+      try {
+        const res = await request('GET', '/api/events/' + eventId + '/signup-count', { auth: false })
+        return { data: res.data || 0, error: null }
+      } catch (e) {
+        return { data: 0, error: e }
+      }
+    },
     async listSignupsByOwner() {
       try {
         const res = await request('GET', '/api/signups/mine')

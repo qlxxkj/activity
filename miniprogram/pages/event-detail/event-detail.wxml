@@ -75,24 +75,28 @@
       <text class="desc">{{event.description || '还没有填写事项介绍。'}}</text>
     </view>
 
-    <!-- 参与记录 -->
+    <!-- 参与记录（明细仅主办方可见；非主办方只显示人数） -->
     <view class="sheet">
       <view class="block-head">
         <text class="block-title">参与记录</text>
-        <text class="block-count">{{signups.length}} 人</text>
+        <text class="block-count">{{signupCount}} 人</text>
       </view>
 
-      <view class="signup-empty" wx:if="{{signups.length === 0}}">
-        <text class="se-text">还没有参与记录</text>
-      </view>
-
-      <view class="signup-row" wx:for="{{signups}}" wx:key="id">
-        <view class="s-avatar">{{item.initial}}</view>
-        <view class="s-info">
-          <text class="s-name">{{item.user_name}}</text>
-          <text class="s-phone">{{item.user_phone}}</text>
+      <block wx:if="{{isOwner}}">
+        <view class="signup-empty" wx:if="{{signups.length === 0}}">
+          <text class="se-text">还没有参与记录</text>
         </view>
-        <text class="s-time">{{item.timeText}}</text>
+        <view class="signup-row" wx:for="{{signups}}" wx:key="id">
+          <view class="s-avatar">{{item.initial}}</view>
+          <view class="s-info">
+            <text class="s-name">{{item.user_name}}</text>
+            <text class="s-phone">{{item.user_phone}}</text>
+          </view>
+          <text class="s-time">{{item.timeText}}</text>
+        </view>
+      </block>
+      <view class="signup-empty" wx:else>
+        <text class="se-text">参与信息仅主办方可见</text>
       </view>
     </view>
 
@@ -103,7 +107,7 @@
 <!-- 底部操作栏 -->
 <view class="bottom-bar" wx:if="{{state === 'ready'}}">
   <view class="bb-left">
-    <text class="bb-num">{{signups.length}}</text>
+    <text class="bb-num">{{signupCount}}</text>
     <text class="bb-label">人已参与</text>
   </view>
   <view class="btn-primary bb-btn" wx:if="{{!isOwner}}" bindtap="goSignup">我要参与</view>

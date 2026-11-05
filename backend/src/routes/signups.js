@@ -85,18 +85,12 @@ function deleteSignupRoute(db) {
 }
 
 function register(router, db) {
-  router.get('/api/signups/mine', requireUserSafe(), listByOwnerRoute(db))
-  router.get('/api/events/:eventId/signups', listForEventRoute(db))
+  const { requireUser, optionalUser } = require('../middleware/auth')
+  router.get('/api/signups/mine', requireUser, listByOwnerRoute(db))
+  router.get('/api/events/:eventId/signups', optionalUser, listForEventRoute(db))
   router.get('/api/events/:eventId/signup-count', countForEventRoute(db))
-  router.post('/api/signups', createSignupRoute(db))
-  router.delete('/api/signups/:id', deleteSignupRoute(db))
-}
-
-// 报名创建/取消允许"先匿名提交、后登录补全"，所以这里不强求登录；
-// 但"我的报名"必须登录。用一个可选用户解析器兜底。
-function requireUserSafe() {
-  const { optionalUser } = require('../middleware/auth')
-  return optionalUser
+  router.post('/api/signups', requireUser, createSignupRoute(db))
+  router.delete('/api/signups/:id', requireUser, deleteSignupRoute(db))
 }
 
 module.exports = { register }

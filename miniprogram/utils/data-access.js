@@ -50,6 +50,11 @@ async function listSignupsForEvent(eventId) {
   return { data, error }
 }
 
+async function getSignupCount(eventId) {
+  const { data, error } = await cloud.api.getSignupCount(eventId)
+  return { data, error }
+}
+
 async function createSignup(payload) {
   const { data, error } = await cloud.api.createSignup(payload)
   return { data, error }
@@ -71,6 +76,6 @@ async function uploadEventCover(tempFilePath) {
 
 module.exports = {
   listEvents, listCities, listEventsByOwner, getEvent, createEvent, updateEvent, deleteEvent,
-  listSignupsByOwner, listSignupsForEvent, createSignup, deleteSignup,
+  listSignupsByOwner, listSignupsForEvent, getSignupCount, createSignup, deleteSignup,
   uploadEventCover,
 }

@@ -1,4 +1,4 @@
-const { getEvent, listSignupsForEvent, deleteEvent } = require('../../utils/data-access')
+const { getEvent, listSignupsForEvent, getSignupCount, deleteEvent } = require('../../utils/data-access')
 const { requireSession } = require('../../utils/auth-guard')
 const { decorateEvent, dateParts, initial } = require('../../utils/format')
 
@@ -7,6 +7,7 @@ Page({
     state: 'loading',
     event: null,
     signups: [],
+    signupCount: 0,
     isOwner: false,
     error: '',
   },
@@ -15,6 +16,11 @@ Page({
     this.id = options.id
     this.restoreOwner()
     this.load()
+  },
+
+  onShow() {
+    // 从报名页返回后刷新人数（onShow 比 onLoad 触发更可靠）
+    if (this.id && this.data.state === 'ready') this.load()
   },
 
   restoreOwner() {
@@ -34,15 +40,22 @@ Page({
       this.setData({ state: 'error', error: error.message || '加载失败' })
       return
     }
-    const sg = await listSignupsForEvent(this.id)
-    const signups = (sg && sg.data ? sg.data : []).map(row => Object.assign({}, row, {
-      initial: initial(row.user_name),
-      timeText: dateParts(row.created_at).text,
-    }))
+    // 公开人数（所有人可见，不依赖登录）
+    const { data: count } = await getSignupCount(this.id)
+    // 报名明细仅主办方可见；非主办方 signups 保持空数组，但 signupCount 正确
+    let signups = []
+    if (this.data.isOwner) {
+      const sg = await listSignupsForEvent(this.id)
+      signups = (sg && sg.data ? sg.data : []).map(row => Object.assign({}, row, {
+        initial: initial(row.user_name),
+        timeText: dateParts(row.created_at).text,
+      }))
+    }
     this.setData({
       state: 'ready',
       event: decorateEvent(data),
       signups,
+      signupCount: count || 0,
     })
   },
 
