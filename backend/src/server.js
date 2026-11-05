@@ -22,6 +22,7 @@ const { open } = require('./db')
 const { PORT, UPLOAD_DIR, CORS_ORIGINS } = require('./config')
 const { register: registerEvents } = require('./routes/events')
 const { register: registerSignups } = require('./routes/signups')
+const { reverseGeocode } = require('./routes/geo')
 const { loginRoute, meRoute, profileRoute, adminLoginRoute } = require('./routes/auth')
 const { coverUploadRoute } = require('./routes/storage')
 const { requireUser, optionalUser } = require('./middleware/auth')
@@ -66,6 +67,15 @@ app.post('/api/auth/admin', adminLoginRoute(db)) // 服务端管理页登录（�
 // 活动 + 报名
 registerEvents(app, db)
 registerSignups(app, db)
+
+// 逆地理（服务端调用腾讯 LBS，IP 授权模式；前端只传坐标）
+app.get('/api/geo/reverse', async (req, res) => {
+  const { lat, lng } = req.query
+  if (!lat || !lng) return res.status(400).json({ error: { code: 'BAD_PARAMS', message: 'lat 和 lng 必填' } })
+  const result = await reverseGeocode(String(lat), String(lng))
+  if (!result.ok) return res.status(502).json(result)
+  res.json(result)
+})
 
 // 健康检查（部署探活用）
 app.get('/api/health', (req, res) => {
